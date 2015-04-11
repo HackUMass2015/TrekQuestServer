@@ -16,8 +16,8 @@ app.post('/user', function(req, res){
 
 	var db = new sqlite3.Database(dbName);
 
-	var stmt = db.prepare("INSERT OR IGNORE INTO users(" + req.body.id + "," + req.body.username + ")");
-	//stmt.run(req.body.id, req.body.name);
+	var stmt = db.prepare("INSERT OR IGNORE INTO users VALUES (?, ?)");
+	stmt.run(req.body.id, req.body.name);
 	stmt.finalize();
 
 	console.log("Added User");
