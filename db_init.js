@@ -5,7 +5,7 @@ db.serialize(function() {
   console.log("Database Serialization Initializing...");
 
   //Setting up info tables
-  setupTable("users", "(id TEXT, username TEXT)");
+  setupTable("users", "(id TEXT, username TEXT, UNIQUE(id, username))");
   setupTable("teams", "(id TEXT, name TEXT, max INTEGER)");
   setupTable("locs", "(id TEXT, ta_id INTEGER)");
   setupTable("games", "(id TEXT, author_id TEXT, start INTEGER, end INTEGER, points INTEGER)");
