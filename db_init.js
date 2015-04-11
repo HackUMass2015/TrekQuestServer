@@ -68,10 +68,16 @@ var url;
 db.serialize(function() {
   console.log("Database Serialization Initializing...");
 
+  //Setting up info tables
   setupTable("users", "(id TEXT, username TEXT)");
   setupTable("teams", "(id TEXT, name TEXT, max INTEGER)");
-  setupTable("locations", "(id TEXT, locID INTEGER)");
-  setupTable("userTeamMap", "(user_id TEXT, team_id TEXT)");
+  setupTable("locs", "(id TEXT, ta_id INTEGER)");
+  setupTable("games", "(id TEXT, author_id TEXT, start INTEGER, end INTEGER, points INTEGER)");
+
+  //Setting up mapping tables
+  setupTable("users_teams_map", "(user_id TEXT, team_id TEXT)");
+  setupTable("games_locs_map", "(game_id TEXT, loc_id)");
+  setupTable("games_teams_map", "(game_id TEXT, loc_id)")
 
   testUsers();
   testTeams();
@@ -105,14 +111,14 @@ function testTeams() {
 }
 
 function testLocations() {
-	var stmt = db.prepare("INSERT INTO locations VALUES (?, ?)");
+	var stmt = db.prepare("INSERT INTO locs VALUES (?, ?)");
 	for (var i = 0; i < 10; i++) {
 	  stmt.run("location-" + i, i);
 	}
 	stmt.finalize();
 
-	db.each("SELECT rowid AS num, locID FROM locations", function(err, row) {
-	  console.log(row.num + ": " + row.locID);
+	db.each("SELECT rowid AS num, ta_id FROM locs", function(err, row) {
+	  console.log(row.num + ": " + row.ta_id);
 	});
 }
 
