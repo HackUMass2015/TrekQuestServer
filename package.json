@@ -4,7 +4,8 @@
   "description": "A HackUMass app server",
   "main": "TestExpress.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node TestExpress.js"
   },
   "repository": {
     "type": "git",
