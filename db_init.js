@@ -74,7 +74,8 @@ db.serialize(function() {
 
   testUsers();
   testTeams();
-
+  testLocations();
+  
   console.log("Tables initialized!");
 });
 
