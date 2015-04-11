@@ -96,13 +96,13 @@ function setupTeams() {
 	db.run("DROP TABLE IF EXISTS teams");
 	db.run("CREATE TABLE teams (name TEXT, max INTEGER)");
 
-	var stmt = db.prepare("INSERT INTO users VALUES (?, ?)");
+	var stmt = db.prepare("INSERT INTO teams VALUES (?, ?)");
 	for (var i = 0; i < 10; i++) {
 	  stmt.run("team-name " + i, i);
 	}
 	stmt.finalize();
 
-	db.each("SELECT rowid AS num, name, max FROM users", function(err, row) {
+	db.each("SELECT rowid AS num, name, max FROM teams", function(err, row) {
 	  console.log(row.num + ": " + row.name + ", " + row.max);
 	});
 }
