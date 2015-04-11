@@ -70,7 +70,7 @@ db.serialize(function() {
 
   setupTable("users", "(id TEXT, username TEXT)");
   setupTable("teams", "(name TEXT, max INTEGER)");
-  setupTable("locations" "(locID INTEGER)")
+  setupTable("locations", "(locID INTEGER)")
 
   testUsers();
   testTeams();
