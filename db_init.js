@@ -68,19 +68,26 @@ var url;
 db.serialize(function() {
   console.log("Database Serialization Initializing...");
 
-  setupUsers();
+  //setupUsers();
 
-  setupTeams();
+  //setupTeams();
+  setupTable("users", "(id TEXT, username TEXT)");
+  setupTable("teams", "(name TEXT, max INTEGER)");
+
+  testUsers();
+  testTeams();
 
   console.log("Table users initialized!");
-
-  
 });
 
 function setupUsers() {
 	db.run("DROP TABLE IF EXISTS users");
 	db.run("CREATE TABLE users (id TEXT, username TEXT)");
 
+	
+}
+
+function testUsers() {
 	var stmt = db.prepare("INSERT INTO users VALUES (?, ?)");
 	for (var i = 0; i < 10; i++) {
 	  stmt.run("device " + i, "username " + i);
@@ -96,6 +103,10 @@ function setupTeams() {
 	db.run("DROP TABLE IF EXISTS teams");
 	db.run("CREATE TABLE teams (name TEXT, max INTEGER)");
 
+	
+}
+
+function testTeams() {
 	var stmt = db.prepare("INSERT INTO teams VALUES (?, ?)");
 	for (var i = 0; i < 10; i++) {
 	  stmt.run("team-name " + i, i);
@@ -107,19 +118,11 @@ function setupTeams() {
 	});
 }
 
-function setupTable(table_name, colums) {
+function setupTable(table_name, columns) {
 	console.log("Setting up " + table_name + "...");
-	db.run("DROP TABLE IF EXISTS table_name");
-	db.run("CREATE TABLE table_name (id TEXT, username TEXT)");
 
-	var stmt = db.prepare("INSERT INTO table_name VALUES (?, ?)");
-	for (var i = 0; i < 10; i++) {
-	  stmt.run("device " + i, "username " + i);
-	}
-	stmt.finalize();
+	db.run("DROP TABLE IF EXISTS " + table_name);
+	db.run("CREATE TABLE " + table_name + " " + columns);
 
-	db.each("SELECT rowid AS num, id, username FROM table_name", function(err, row) {
-	  console.log(row.num + ": " + row.id + ", " + row.username);
-	});
-	console.log(table_name + " setup");
+	console.log("Table " + table_name + " initialized!");
 }
