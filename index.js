@@ -20,10 +20,11 @@ app.post('/user', function(req, res){
 	stmt.finalize();
 
 	console.log("Added User");
-	db.each("SELECT id, name FROM users", function(err, row) {
-	  console.log(row.id + ": " + row.name);
+	
+	db.each("SELECT id, username FROM users", function(err, row) {
+	  console.log(row.id + ": " + row.username);
 	});
-
+	
 	db.close();
 	res.send(req.body);
 });
