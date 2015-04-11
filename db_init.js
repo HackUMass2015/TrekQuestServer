@@ -75,7 +75,7 @@ db.serialize(function() {
   testUsers();
   testTeams();
   testLocations();
-  
+
   console.log("Tables initialized!");
 });
 
@@ -104,7 +104,7 @@ function testTeams() {
 }
 
 function testLocations() {
-	var stmt = db.prepare("INSERT INTO locations VALUES (?, ?)");
+	var stmt = db.prepare("INSERT INTO locations VALUES (?)");
 	for (var i = 0; i < 10; i++) {
 	  stmt.run(i);
 	}
