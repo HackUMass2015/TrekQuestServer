@@ -10,7 +10,7 @@ app.get('/', function (req, res) {
   res.send('Hello World!');
 });
 
-app.put('/user', function(req, res){
+app.post('/user', function(req, res){
 	console.log(req.body);
 
 	var db = new sqlite3.Database(dbName);
