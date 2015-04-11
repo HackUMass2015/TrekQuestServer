@@ -13,6 +13,8 @@ app.get('/', function (req, res) {
 app.put('/user', function(req, res){
 	console.log(req.body);
 
+	var db = new sqlite3.Database(dbName);
+
 	var stmt = db.prepare("INSERT INTO users VALUES (?, ?)");
 	for (var i = 0; i < 10; i++) {
 	  stmt.run("device-" + i, "username " + i);
