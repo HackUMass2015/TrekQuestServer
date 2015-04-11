@@ -16,13 +16,12 @@ app.post('/user', function(req, res){
 	var db = new sqlite3.Database(dbName);
 
 	var stmt = db.prepare("INSERT INTO users VALUES (?, ?)");
-	for (var i = 0; i < 10; i++) {
-	  stmt.run("device-" + i, "username " + i);
-	}
+	stmt.run(req.body.id, req.body.name);
 	stmt.finalize();
 
-	db.each("SELECT id, username FROM users", function(err, row) {
-	  console.log(row.id + ": " + row.username);
+	console.log("Added User");
+	db.each("SELECT id, name FROM users", function(err, row) {
+	  console.log(row.id + ": " + row.name);
 	});
 
 	//db.close();
