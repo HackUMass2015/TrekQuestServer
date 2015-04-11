@@ -71,7 +71,7 @@ db.serialize(function() {
   db.run("DROP TABLE IF EXISTS users");
   db.run("CREATE TABLE users (id TEXT, username TEXT)");
 
-  var stmt = db.prepare("INSERT INTO lorem VALUES (?, ?)");
+  var stmt = db.prepare("INSERT INTO users VALUES (?, ?)");
   for (var i = 0; i < 10; i++) {
       stmt.run("device " + i, "username " + i);
   }
