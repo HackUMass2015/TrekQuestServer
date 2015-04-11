@@ -68,24 +68,14 @@ var url;
 db.serialize(function() {
   console.log("Database Serialization Initializing...");
 
-  //setupUsers();
-
-  //setupTeams();
   setupTable("users", "(id TEXT, username TEXT)");
   setupTable("teams", "(name TEXT, max INTEGER)");
 
   testUsers();
   testTeams();
 
-  console.log("Table users initialized!");
+  console.log("Tables initialized!");
 });
-
-function setupUsers() {
-	db.run("DROP TABLE IF EXISTS users");
-	db.run("CREATE TABLE users (id TEXT, username TEXT)");
-
-	
-}
 
 function testUsers() {
 	var stmt = db.prepare("INSERT INTO users VALUES (?, ?)");
@@ -97,13 +87,6 @@ function testUsers() {
 	db.each("SELECT rowid AS num, id, username FROM users", function(err, row) {
 	  console.log(row.num + ": " + row.id + ", " + row.username);
 	});
-}
-
-function setupTeams() {
-	db.run("DROP TABLE IF EXISTS teams");
-	db.run("CREATE TABLE teams (name TEXT, max INTEGER)");
-
-	
 }
 
 function testTeams() {
