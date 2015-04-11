@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+var sqlite3	= require('sqlite3').verbose();
 
 app.get('/', function (req, res) {
   res.send('Hello World!');
