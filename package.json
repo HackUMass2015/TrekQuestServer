@@ -2,10 +2,10 @@
   "name": "TrekQuestServer",
   "version": "0.0.0",
   "description": "A HackUMass app server",
-  "main": "TestExpress.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "sudo node TestExpress.js"
+    "start": "sudo node index.js"
   },
   "repository": {
     "type": "git",
