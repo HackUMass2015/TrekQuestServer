@@ -69,8 +69,9 @@ db.serialize(function() {
   console.log("Database Serialization Initializing...");
 
   setupTable("users", "(id TEXT, username TEXT)");
-  setupTable("teams", "(name TEXT, max INTEGER)");
-  setupTable("locations", "(locID INTEGER)")
+  setupTable("teams", "(id TEXT, name TEXT, max INTEGER)");
+  setupTable("locations", "(id TEXT, locID INTEGER)");
+  setupTable("userTeamMap", "(user_id TEXT, team_id TEXT)");
 
   testUsers();
   testTeams();
@@ -82,31 +83,31 @@ db.serialize(function() {
 function testUsers() {
 	var stmt = db.prepare("INSERT INTO users VALUES (?, ?)");
 	for (var i = 0; i < 10; i++) {
-	  stmt.run("device " + i, "username " + i);
+	  stmt.run("device-" + i, "username " + i);
 	}
 	stmt.finalize();
 
-	db.each("SELECT rowid AS num, id, username FROM users", function(err, row) {
-	  console.log(row.num + ": " + row.id + ", " + row.username);
+	db.each("SELECT id, username FROM users", function(err, row) {
+	  console.log(row.id + ": " + row.username);
 	});
 }
 
 function testTeams() {
-	var stmt = db.prepare("INSERT INTO teams VALUES (?, ?)");
+	var stmt = db.prepare("INSERT INTO teams VALUES (?, ?, ?)");
 	for (var i = 0; i < 10; i++) {
-	  stmt.run("team-name " + i, i);
+	  stmt.run("team-" + i, "team-name " + i, i);
 	}
 	stmt.finalize();
 
-	db.each("SELECT rowid AS num, name, max FROM teams", function(err, row) {
-	  console.log(row.num + ": " + row.name + ", " + row.max);
+	db.each("SELECT id, name, max FROM teams", function(err, row) {
+	  console.log(row.id + ": " + row.name + ", " + row.max);
 	});
 }
 
 function testLocations() {
-	var stmt = db.prepare("INSERT INTO locations VALUES (?)");
+	var stmt = db.prepare("INSERT INTO locations VALUES (?, ?)");
 	for (var i = 0; i < 10; i++) {
-	  stmt.run(i);
+	  stmt.run("location-" + i, i);
 	}
 	stmt.finalize();
 
