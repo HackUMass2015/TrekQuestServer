@@ -3,6 +3,7 @@ logs
 *.log
 
 # Databases
+trek.db
 *.db
 
 # Runtime data
