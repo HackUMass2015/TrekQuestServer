@@ -3,6 +3,7 @@ var bodyParser = require('body-parser')
 var app = express();
 var sqlite3	= require('sqlite3').verbose();
 var dbName = './trek.db';
+var db = new sqlite3.Database(dbName);
 
 app.use(bodyParser.json());
 
@@ -11,12 +12,15 @@ app.get('/', function (req, res) {
 });
 
 //Addes new users
-app.post('/user', function(req, res){
+app.put('/user', function(req, res){
 	console.log(req.body);
 
-	var db = new sqlite3.Database(dbName);
+	
 
-	var stmt = db.prepare("INSERT OR IGNORE INTO users VALUES (?, ?)");
+	var stmt = db.prepare(
+		"insert or replace into users (id,username) values
+		(?, ?)
+		");
 	stmt.run(req.body.id, req.body.name);
 	stmt.finalize();
 
@@ -26,7 +30,7 @@ app.post('/user', function(req, res){
 	  console.log(row.id + ": " + row.username);
 	});
 
-	db.close();
+	//db.close();
 
 	res.send(req.body);
 });
