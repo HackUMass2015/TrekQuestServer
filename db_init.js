@@ -68,20 +68,58 @@ var url;
 db.serialize(function() {
   console.log("Database Serialization Initializing...");
 
-  db.run("DROP TABLE IF EXISTS users");
-  db.run("CREATE TABLE users (id TEXT, username TEXT)");
+  setupUsers();
 
-  var stmt = db.prepare("INSERT INTO users VALUES (?, ?)");
-  for (var i = 0; i < 10; i++) {
-      stmt.run("device " + i, "username " + i);
-  }
-  stmt.finalize();
-
-  db.each("SELECT rowid AS num, id, username FROM users", function(err, row) {
-      console.log(row.num + ": " + row.id + ", " + row.username);
-  });
+  setupTeams();
 
   console.log("Table users initialized!");
 
   
 });
+
+function setupUsers() {
+	db.run("DROP TABLE IF EXISTS users");
+	db.run("CREATE TABLE users (id TEXT, username TEXT)");
+
+	var stmt = db.prepare("INSERT INTO users VALUES (?, ?)");
+	for (var i = 0; i < 10; i++) {
+	  stmt.run("device " + i, "username " + i);
+	}
+	stmt.finalize();
+
+	db.each("SELECT rowid AS num, id, username FROM users", function(err, row) {
+	  console.log(row.num + ": " + row.id + ", " + row.username);
+	});
+}
+
+function setupTeams() {
+	db.run("DROP TABLE IF EXISTS teams");
+	db.run("CREATE TABLE teams (name TEXT, max INTEGER)");
+
+	var stmt = db.prepare("INSERT INTO users VALUES (?, ?)");
+	for (var i = 0; i < 10; i++) {
+	  stmt.run("team-name " + i, i);
+	}
+	stmt.finalize();
+
+	db.each("SELECT rowid AS num, name, max FROM users", function(err, row) {
+	  console.log(row.num + ": " + row.name + ", " + row.max);
+	});
+}
+
+function setupTable(table_name, colums) {
+	console.log("Setting up " + table_name + "...");
+	db.run("DROP TABLE IF EXISTS table_name");
+	db.run("CREATE TABLE table_name (id TEXT, username TEXT)");
+
+	var stmt = db.prepare("INSERT INTO table_name VALUES (?, ?)");
+	for (var i = 0; i < 10; i++) {
+	  stmt.run("device " + i, "username " + i);
+	}
+	stmt.finalize();
+
+	db.each("SELECT rowid AS num, id, username FROM table_name", function(err, row) {
+	  console.log(row.num + ": " + row.id + ", " + row.username);
+	});
+	console.log(table_name + " setup");
+}
