@@ -1,9 +1,10 @@
 var express = require('express');
+var bodyParser = require('body-parser')
 var app = express();
 var sqlite3	= require('sqlite3').verbose();
 var dbName = './trek.db';
 
-app.use(express.bodyParser());
+app.use(bodyParser.json());
 
 app.get('/', function (req, res) {
   res.send('Hello World!');
