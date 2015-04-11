@@ -70,6 +70,7 @@ db.serialize(function() {
 
   setupTable("users", "(id TEXT, username TEXT)");
   setupTable("teams", "(name TEXT, max INTEGER)");
+  setupTable("locations" "(locID INTEGER)")
 
   testUsers();
   testTeams();
@@ -98,6 +99,18 @@ function testTeams() {
 
 	db.each("SELECT rowid AS num, name, max FROM teams", function(err, row) {
 	  console.log(row.num + ": " + row.name + ", " + row.max);
+	});
+}
+
+function testLocations() {
+	var stmt = db.prepare("INSERT INTO locations VALUES (?, ?)");
+	for (var i = 0; i < 10; i++) {
+	  stmt.run(i);
+	}
+	stmt.finalize();
+
+	db.each("SELECT rowid AS num, locID FROM locations", function(err, row) {
+	  console.log(row.num + ": " + row.locID);
 	});
 }
 
