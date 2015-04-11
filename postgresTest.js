@@ -1,10 +1,12 @@
 var pg = require('pg');
 var conString = "postgres://postgres:password@52.5.229.43/mydb";
 
+console.log("Starting test...");
 //this starts initializes a connection pool
 //it will keep idle connections open for a (configurable) 30 seconds
 //and set a limit of 20 (also configurable)
 pg.connect(conString, function(err, client, done) {
+  console.log("Starting connection...");
   if(err) {
     return console.error('error fetching client from pool', err);
   }
@@ -19,3 +21,4 @@ pg.connect(conString, function(err, client, done) {
     //output: 1
   });
 });
+console.log("Complete");
