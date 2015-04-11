@@ -24,7 +24,7 @@ app.post('/user', function(req, res){
 	  console.log(row.id + ": " + row.name);
 	});
 
-	//db.close();
+	db.close();
 	res.send(req.body);
 });
 
