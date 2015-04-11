@@ -70,6 +70,17 @@ db.serialize(function() {
 
   db.run("DROP TABLE IF EXISTS users");
   db.run("CREATE TABLE users (id TEXT, username TEXT)");
+
+  var stmt = db.prepare("INSERT INTO lorem VALUES (?, ?)");
+  for (var i = 0; i < 10; i++) {
+      stmt.run("device " + i, "username " + i);
+  }
+  stmt.finalize();
+
+  db.each("SELECT rowid AS num, id, username FROM users", function(err, row) {
+      console.log(row.num + ": " + row.id + ", " + row.username);
+  });
+
   console.log("Table users initialized!");
 
   
