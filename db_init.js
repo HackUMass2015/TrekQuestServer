@@ -7,7 +7,7 @@ db.serialize(function() {
   //Setting up info tables
   setupTable("users", "(id TEXT UNIQUE, username TEXT)");
   setupTable("teams", "(id TEXT, name TEXT, max INTEGER)");
-  setupTable("locs", "(id TEXT UNIQUE, zipcode INTEGER UNIQUE, lat REAL, long REAL, tripadvisor_id INTEGER)");
+  setupTable("locs", "(id TEXT UNIQUE, zipcode INTEGER UNIQUE, lat REAL, long REAL, location_id INTEGER)");
   setupTable("games", "(id TEXT, zipcode INTEGER, start INTEGER, end INTEGER, points INTEGER, winnerID TEXT)");
 
   //Setting up mapping tables

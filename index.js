@@ -55,8 +55,12 @@ app.get('/loc', function(req, res){
 			if (!error && response.statusCode == 200) {
 				console.log("body: " + body);
 				var json = JSON.parse(body);
-				console.log("json: " + json);
+				//console.log("json: " + json);
 				console.log(Object.getOwnPropertyNames(json));
+
+				var data = json['data'];
+				console.log("data: " + data);
+				console.log(Object.getOwnPropertyNames(data));
 
 				// var results = json['results'][0];
 				// console.log("results: " + results);
