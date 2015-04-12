@@ -7,7 +7,7 @@ db.serialize(function() {
   //Setting up info tables
   setupTable("users", "(id TEXT UNIQUE, username TEXT)");
   setupTable("teams", "(id TEXT, name TEXT, max INTEGER)");
-  setupTable("locs", "(id TEXT UNIQUE, ta_id INTEGER UNIQUE)");
+  setupTable("locs", "(id TEXT UNIQUE, zipcode INTEGER UNIQUE, lat REAL, long REAL, tripadvisor_id INTEGER)");
   setupTable("games", "(id TEXT, zipcode INTEGER, start INTEGER, end INTEGER, points INTEGER, winnerID TEXT)");
 
   //Setting up mapping tables
@@ -17,7 +17,7 @@ db.serialize(function() {
 
   testUsers();
   testTeams();
-  testLocations();
+  // testLocations();
   testGames();
 
   console.log("Tables initialized!");
@@ -47,17 +47,17 @@ function testTeams() {
 	});
 }
 
-function testLocations() {
-	var stmt = db.prepare("INSERT INTO locs VALUES (?, ?)");
-	for (var i = 0; i < 2; i++) {
-	  stmt.run("location-" + i, i);
-	}
-	stmt.finalize();
+// function testLocations() {
+	// var stmt = db.prepare("INSERT INTO locs VALUES (?, ?)");
+	// for (var i = 0; i < 2; i++) {
+	//   stmt.run("location-" + i, i);
+	// }
+	// stmt.finalize();
 
-	db.each("SELECT id, ta_id FROM locs", function(err, row) {
-	  console.log(row.id + ": " + row.ta_id);
-	});
-}
+	// db.each("SELECT id, ta_id FROM locs", function(err, row) {
+	//   console.log(row.id + ": " + row.ta_id);
+	// });
+//}
 
 function testGames() {
 	

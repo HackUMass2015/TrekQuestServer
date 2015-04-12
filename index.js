@@ -4,6 +4,7 @@ var app = express();
 var sqlite3	= require('sqlite3').verbose();
 var dbName = './trek.db';
 var db = new sqlite3.Database(dbName);
+var request = require('request');
 
 app.use(bodyParser.json());
 
@@ -28,21 +29,29 @@ app.put('/user', function(req, res){
 	res.send(req.body);
 });
 
-//Adds location if location doesn't exist. Replaces location if exists
-app.put('/loc', function(req, res){
+//Get a location if it exists. Creates a new one if not
+app.get('/loc', function(req, res){
 	console.log(req.body);
 
-	var stmt = db.prepare("INSERT OR REPLACE INTO locs (id,ta_id) VALUES (?, ?)");
-	stmt.run(req.body.id, req.body.name);
-	stmt.finalize();
+	request('http://www.google.com', function (error, response, body) {
+		if (!error && response.statusCode == 200) {
+			console.log(body) // Show the HTML for the Google homepage. 
+		}
+	})
 
-	console.log("Added Location");
+
+
+	// var stmt = db.prepare("INSERT OR REPLACE INTO locs (id,ta_id) VALUES (?, ?)");
+	// stmt.run(req.body.id, req.body.name);
+	// stmt.finalize();
+
+	// console.log("Added Location");
 	
-	db.each("SELECT id, ta_id FROM locs", function(err, row) {
-	  console.log(row.id + ": " + row.ta_id);
-	});
+	// db.each("SELECT id, ta_id FROM locs", function(err, row) {
+	//   console.log(row.id + ": " + row.ta_id);
+	// });
 
-	res.send(req.body);
+	// res.send(req.body);
 });
 
 //Returns json of all games in a given zip code
