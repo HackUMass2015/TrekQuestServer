@@ -58,9 +58,17 @@ app.get('/loc', function(req, res){
 				//console.log("json: " + json);
 				console.log(Object.getOwnPropertyNames(json));
 
-				var data = json['data'];
+				var data = json['data'][0];
 				console.log("data: " + data);
 				console.log(Object.getOwnPropertyNames(data));
+
+				var ancestors = data['ancestors'][0];
+				console.log("ancestors: " + ancestors);
+				console.log(Object.getOwnPropertyNames(ancestors));
+
+				var location_id = ancestors['location_id'];
+				console.log("location_id: " + location_id);
+				console.log(Object.getOwnPropertyNames(location_id));
 
 				// var results = json['results'][0];
 				// console.log("results: " + results);
