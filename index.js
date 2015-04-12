@@ -33,7 +33,7 @@ app.put('/user', function(req, res){
 app.put('/loc', function(req, res){
 	console.log(req.body);
 
-	var stmt = db.prepare("INSERT OR IGNORE INTO locs (id,username) VALUES (?, ?)");
+	var stmt = db.prepare("INSERT OR IGNORE INTO locs (id,ta_id) VALUES (?, ?)");
 	stmt.run(req.body.id, req.body.name);
 	stmt.finalize();
 
