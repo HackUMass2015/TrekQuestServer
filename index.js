@@ -33,10 +33,16 @@ app.put('/user', function(req, res){
 //Get a location if it exists. Creates a new one if not
 app.get('/loc', function(req, res){
 	console.log(req.body);
+	var location;
+	var lat;
+	var lng;
 
 	request(googleMapsApi + req.body.zipcode, function (error, response, body) {
 		if (!error && response.statusCode == 200) {
-			console.log(body) // Show the HTML for the Google homepage. 
+			location = body.results.geometry.location;
+			lat = location.lat;
+			lng = location.lng;
+			console.log(lat + ", " + lng) // Show the HTML for the Google homepage. 
 		}
 	})
 
