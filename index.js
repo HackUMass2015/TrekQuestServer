@@ -10,7 +10,10 @@ var googleMapsApi = 'http://maps.googleapis.com/maps/api/geocode/json?address=';
 
 var tripAdvisorKey = '?key=HackUMass-93b8e93cda61';
 var tripAdvisorApi = 'http://api.tripadvisor.com/api/partner/2.0/map/';
-var tripAdvisorPhotoPrefix = 'http://api.tripadvisor.com/api/partner/2.0/location/';
+
+var tripAdvisorLocationPrefix = 'http://api.tripadvisor.com/api/partner/2.0/location/';
+
+var tripAdvisorAttractionsSuffix = '/attractions' + tripAdvisorKey;
 var tripAdvisorPhotoSuffix = '/photos' + tripAdvisorKey;
 
 
@@ -61,7 +64,7 @@ function getLangLong(){
 			var lat = location.lat;
 			var lng = location.lng;
 			var latlng = lat + "," + lng;
-			console.log("Latitude and Longitude for " + zipcode + ": " + latlng); // Show the HTML for the Google homepage.
+			//console.log("Latitude and Longitude for " + zipcode + ": " + latlng); // Show the HTML for the Google homepage.
 
 			getTALocID(latlng);
 		}
@@ -76,7 +79,7 @@ function getTALocID(latlng){
 			var data = json['data'][0];
 			var ancestors = data['ancestors'][0];
 			location_id = ancestors['location_id'];
-			console.log("location_id: " + location_id);
+			//console.log("location_id: " + location_id);
 
 			getImage(location_id);
 		}
@@ -84,13 +87,13 @@ function getTALocID(latlng){
 }
 
 function getImage(){
-	request(tripAdvisorPhotoPrefix + location_id + tripAdvisorPhotoSuffix, function (error, response, body) {
+	request(tripAdvisorLocationPrefix + location_id + tripAdvisorPhotoSuffix, function (error, response, body) {
 		if (!error && response.statusCode == 200) {
 			var json = JSON.parse(body);
 			var data = json['data'][0];
 			var thumbnail = data['images']['thumbnail'];
 			image = thumbnail['url'];
-			console.log("image: " + image);
+			//console.log("image: " + image);
 			locResponse();
 		}
 	});
@@ -102,10 +105,37 @@ function locResponse(){
 	stmt.finalize();
 
 	var json = JSON.stringify({ value: location_id});
-	console.log(json);
+	//console.log(json);
 
 	response.type('text/plain');
 	response.send(json);
+}
+
+//Get attractions for a given zip code.
+app.get('/attractions', function(req, res){
+	console.log(req.body);
+
+	zipcode = "\" + req.body.zipcode + "\"";
+
+	response = res;
+	getAttractions();
+});
+
+function getAttractions(){
+	db.get("SELECT location_id FROM locs WHERE zipcode = " + zipcode,function (error, row) {
+		request(tripAdvisorLocationPrefix + row.location_id + tripAdvisorAttractionsSuffix, function (error, response, body) {
+			if (!error && response.statusCode == 200) {
+				var json = JSON.parse(body);
+				var data = json['data'][0];
+				var location_id = data['location_id'];
+				console.log(location_id);
+				//console.log("image: " + image);
+				//locResponse();
+				response.send(location_id);
+			}
+		});
+	});
+	
 }
 
 //Returns json of all games in a given zip code
@@ -145,7 +175,7 @@ app.get('/games', function(req, res){
 //Returns json of all locations
 app.get('/locs', function(req, res){
 	var json;
-	db.all("SELECT id, zipcode, image FROM locs", function(err, rows) {
+	db.all("SELECT location_ id, zipcode, image FROM locs", function(err, rows) {
 		console.log(rows);
 		json = JSON.stringify(rows);
 		console.log(json);
