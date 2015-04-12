@@ -43,7 +43,7 @@ app.get('/loc', function(req, res){
 			console.log("json: " + json);
 			console.log(Object.getOwnPropertyNames(json));
 
-			var results = json['results'];
+			var results = json['results'][0];
 			console.log("results: " + results);
 			console.log(Object.getOwnPropertyNames(results));
 
