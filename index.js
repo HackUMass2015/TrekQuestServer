@@ -54,12 +54,13 @@ app.get('/loc', function(req, res){
 
 			request(tripAdvisorApi + latlng + tripAdvisorKey, function (error, response, body) {
 			if (!error && response.statusCode == 200) {
-				console.log("body: " + body);
 				var json = JSON.parse(body);
 				var data = json['data'][0];
 				var ancestors = data['ancestors'][0];
 				location_id = ancestors['location_id'];
 				console.log("location_id: " + location_id);
+
+				res.send(location_id);
 				}
 			});
 		}
@@ -79,7 +80,7 @@ app.get('/loc', function(req, res){
 	//   console.log(row.id + ": " + row.ta_id);
 	// });
 
-	res.send(location_id);
+	
 });
 
 //Returns json of all games in a given zip code
