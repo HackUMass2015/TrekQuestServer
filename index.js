@@ -5,6 +5,7 @@ var sqlite3	= require('sqlite3').verbose();
 var dbName = './trek.db';
 var db = new sqlite3.Database(dbName);
 var request = require('request');
+var googleMapsApi = 'http://maps.googleapis.com/maps/api/geocode/json?address='
 
 app.use(bodyParser.json());
 
@@ -33,7 +34,7 @@ app.put('/user', function(req, res){
 app.get('/loc', function(req, res){
 	console.log(req.body);
 
-	request('http://www.google.com', function (error, response, body) {
+	request(googleMapsApi + req.body.zipcode, function (error, response, body) {
 		if (!error && response.statusCode == 200) {
 			console.log(body) // Show the HTML for the Google homepage. 
 		}
