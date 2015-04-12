@@ -104,6 +104,8 @@ function locResponse(){
 	stmt.run(location_id, zipcode, image);
 	stmt.finalize();
 
+	getAttractions();
+
 	var json = JSON.stringify({ value: location_id});
 	//console.log(json);
 
@@ -112,14 +114,14 @@ function locResponse(){
 }
 
 //Get attractions for a given zip code.
-app.get('/attractions', function (req, res){
-	console.log(req.body);
+// app.get('/attractions', function (req, res){
+// 	console.log(req.body);
 
-	zipcode = "\"" + req.body.zipcode + "\"";
+// 	zipcode = "\"" + req.body.zipcode + "\"";
 
-	response = res;
-	getAttractions();
-});
+// 	response = res;
+// 	getAttractions();
+// });
 
 function getAttractions (){
 	db.get("SELECT location_id FROM locs WHERE zipcode = " + zipcode, function (error, row) {
@@ -136,21 +138,21 @@ function getAttractions (){
 				});
 				//console.log("image: " + image);
 				//locResponse();
-				attractionResponse();
+				//attractionResponse();
 				
 			}
 		});
 	});
 }
 
-function attractionResponse (){
-	db.all("SELECT location_id FROM attractions WHERE zipcode = " + zipcode, function (error, rows) {
-		var json = JSON.stringify(rows);
+// function attractionResponse (){
+// 	db.all("SELECT location_id FROM attractions WHERE zipcode = " + zipcode, function (error, rows) {
+// 		var json = JSON.stringify(rows);
 
-		response.type('text/plain');
-		response.send(location_id);
-	});
-}
+// 		response.type('text/plain');
+// 		response.send(location_id);
+// 	});
+// }
 
 //Returns json of all games in a given zip code
 app.get('/localGames', function(req, res){
