@@ -40,6 +40,7 @@ app.get('/loc', function(req, res){
 	request(googleMapsApi + req.body.zipcode, function (error, response, body) {
 		if (!error && response.statusCode == 200) {
 			location = body;
+			console.log(typeof(location));
 			console.log(location['results']);
 			console.log(Object.getOwnPropertyNames(location));
 			// lat = location.lat;
