@@ -40,12 +40,13 @@ app.get('/loc', function(req, res){
 	request(googleMapsApi + req.body.zipcode, function (error, response, body) {
 		if (!error && response.statusCode == 200) {
 			location = JSON.parse(body);
+			location = location['results'].geometry.location;
 			console.log(typeof(location));
-			console.log(location['results']);
+			console.log(location);
 			console.log(Object.getOwnPropertyNames(location));
-			// lat = location.lat;
-			// lng = location.lng;
-			// console.log(lat + ", " + lng) // Show the HTML for the Google homepage. 
+			lat = location.lat;
+			lng = location.lng;
+			console.log(lat + ", " + lng) // Show the HTML for the Google homepage. 
 		}
 	})
 
