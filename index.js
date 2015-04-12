@@ -76,7 +76,7 @@ function getTALocID(latlng){
 			location_id = ancestors['location_id'];
 			console.log("location_id: " + location_id);
 
-			getPhotoUrl(location_id);
+			getImage(location_id);
 		}
 	});
 }
