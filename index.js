@@ -11,11 +11,9 @@ app.get('/', function (req, res) {
   res.send('Hello World!');
 });
 
-//Addes new users
+//Addes user if user doesn't exist. Updates username if user exists
 app.put('/user', function(req, res){
 	console.log(req.body);
-
-	
 
 	var stmt = db.prepare("INSERT OR REPLACE INTO users (id,username) VALUES (?, ?)");
 	stmt.run(req.body.id, req.body.name);
@@ -24,6 +22,24 @@ app.put('/user', function(req, res){
 	console.log("Added User");
 	
 	db.each("SELECT id, username FROM users", function(err, row) {
+	  console.log(row.id + ": " + row.username);
+	});
+
+	//db.close();
+
+	res.send(req.body);
+});
+
+app.put('/loc', function(req, res){
+	console.log(req.body);
+
+	var stmt = db.prepare("INSERT OR IGNORE INTO locs (id,username) VALUES (?, ?)");
+	stmt.run(req.body.id, req.body.name);
+	stmt.finalize();
+
+	console.log("Added Location");
+	
+	db.each("SELECT id, username FROM locs", function(err, row) {
 	  console.log(row.id + ": " + row.username);
 	});
 
