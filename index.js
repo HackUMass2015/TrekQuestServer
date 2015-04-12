@@ -39,8 +39,16 @@ app.get('/loc', function(req, res){
 
 	request(googleMapsApi + req.body.zipcode, function (error, response, body) {
 		if (!error && response.statusCode == 200) {
-			location = JSON.parse(body);
-			location = location['results'].geometry.location;
+			var json = JSON.parse(body);
+			console.log("json: " + json);
+
+			var results = location['results'];
+			console.log("results: " + results);
+
+			var geometry = results.geometry;
+			console.log("geometry: " + geometry);
+
+			location = geometry.location;
 			console.log(typeof(location));
 			console.log(location);
 			console.log(Object.getOwnPropertyNames(location));
