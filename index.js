@@ -99,15 +99,6 @@ function getImage(){
 	});
 }
 
-	// console.log("Added Location");
-	
-	// db.each("SELECT id, ta_id FROM locs", function(err, row) {
-	//   console.log(row.id + ": " + row.ta_id);
-	// });
-
-	
-});
-
 //Returns json of all games in a given zip code
 app.get('/localGames', function(req, res){
 	console.log(req.body);
