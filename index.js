@@ -45,6 +45,7 @@ app.put('/loc', function(req, res){
 	res.send(req.body);
 });
 
+//Returns json of all games in a given zip code
 app.get('/localGames', function(req, res){
 	console.log(req.body);
 
@@ -60,6 +61,23 @@ app.get('/localGames', function(req, res){
 		// });
 		json = JSON.stringify(rows);
 		// console.log(games.toString());
+		console.log(json);
+
+		res.type('text/plain');
+  		res.send(json);
+	});
+});
+
+//Returns a given players cumulative score
+app.get('/score', function(req, res){
+	console.log(req.body);
+	var score = 0;
+	var json;
+	db.all("SELECT points FROM games WHERE winnerID = " + req.body.id, function(err, rows) {  
+		rows.forEach(function (row) {
+		    score += row.points;
+		});
+		json = JSON.stringify({ value: score});
 		console.log(json);
 
 		res.type('text/plain');
