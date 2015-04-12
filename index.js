@@ -113,8 +113,6 @@ app.get('/localGames', function(req, res){
 	console.log(req.body);
 
 	var json;
-	var games = [];
-	var i = 0;
 	db.all("SELECT id, end, points, image FROM games, locs WHERE games.zipcode = locs.zipcode AND games.zipcode = " + req.body.zipcode, function(err, rows) {  
 		// rows.forEach(function (row) {  
 		//     i++;
@@ -123,6 +121,32 @@ app.get('/localGames', function(req, res){
 		console.log(rows);
 		json = JSON.stringify(rows);
 		// console.log(games.toString());
+		console.log(json);
+
+		res.type('text/plain');
+  		res.send(json);
+	});
+});
+
+//Returns json of all games
+app.get('/games', function(req, res){
+	var json;
+	db.all("SELECT id, zipcode, end, points FROM games", function(err, rows) {
+		console.log(rows);
+		json = JSON.stringify(rows);
+		console.log(json);
+
+		res.type('text/plain');
+  		res.send(json);
+	});
+});
+
+//Returns json of all locations
+app.get('/locs', function(req, res){
+	var json;
+	db.all("SELECT id, zipcode, image FROM locs", function(err, rows) {
+		console.log(rows);
+		json = JSON.stringify(rows);
 		console.log(json);
 
 		res.type('text/plain');
