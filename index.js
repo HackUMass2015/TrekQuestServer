@@ -100,6 +100,8 @@ function getImage(){
 }
 
 function locResponse(){
+	console.log("Location response");
+
 	var stmt = db.prepare("INSERT OR IGNORE INTO locs (location_id,zipcode,image) VALUES (?, ?, ?)");
 	stmt.run(location_id, zipcode, image);
 	stmt.finalize(getAttractions());
@@ -122,6 +124,8 @@ function locResponse(){
 // });
 
 function getAttractions (){
+	console.log("Get attractions for location");
+
 	db.get("SELECT location_id FROM locs WHERE zipcode = " + zipcode, function (error, row) {
 		request(tripAdvisorLocationPrefix + row.location_id + tripAdvisorAttractionsSuffix, function (error, response, body) {
 			if (!error && response.statusCode == 200) {
