@@ -115,7 +115,7 @@ function locResponse(){
 app.get('/attractions', function(req, res){
 	console.log(req.body);
 
-	zipcode = "\" + req.body.zipcode + "\"";
+	zipcode = "\"" + req.body.zipcode + "\"";
 
 	response = res;
 	getAttractions();
