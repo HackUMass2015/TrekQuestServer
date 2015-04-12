@@ -8,7 +8,7 @@ db.serialize(function() {
   setupTable("users", "(id TEXT UNIQUE, username TEXT)");
   setupTable("teams", "(id TEXT, name TEXT, max INTEGER)");
   setupTable("locs", "(id TEXT UNIQUE, ta_id INTEGER UNIQUE)");
-  setupTable("games", "(id TEXT, zipcode INTEGER, start INTEGER, end INTEGER, points INTEGER)");
+  setupTable("games", "(id TEXT, zipcode INTEGER, start INTEGER, end INTEGER, points INTEGER, winnerID TEXT)");
 
   //Setting up mapping tables
   setupTable("users_teams_map", "(user_id TEXT, team_id TEXT)");
@@ -60,15 +60,16 @@ function testLocations() {
 }
 
 function testGames() {
-	var d = new Date();
-	var stmt = db.prepare("INSERT INTO games VALUES (?, ?, ?, ?, ?)");
+	
+	var stmt = db.prepare("INSERT INTO games VALUES (?, ?, ?, ?, ?, ?)");
 	for (var i = 0; i < 12; i++) {
-	  stmt.run("game-" + i, i%4+1, d.getTime(), d.getTime(), i*100);
+		var d = new Date();
+		stmt.run("game-" + i, i%4+1, d.getTime(), d.getTime(), i*100, "1");
 	}
 	stmt.finalize();
 
-	db.each("SELECT id, zipcode, start, end, points FROM games", function(err, row) {
-	  console.log(row.id + ": " + row.zipcode + ", " + row.start + ", " + row.end + ", " + row.points);
+	db.each("SELECT id, zipcode, start, end, points, winnerID FROM games", function(err, row) {
+	  console.log(row.id + ": " + row.zipcode + ", " + row.start + ", " + row.end + ", " + row.points + ", " + row.winnerID);
 	});
 }
 
