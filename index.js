@@ -45,7 +45,7 @@ app.get('/loc', function(req, res){
 			var results = json['results'];
 			console.log("results: " + results);
 
-			var geometry = results['geometry'];
+			var geometry = results[2];
 			console.log("geometry: " + geometry);
 
 			location = geometry['location'];
