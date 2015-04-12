@@ -110,10 +110,10 @@ function locResponse(){
 
 //Returns json of all games in a given zip code
 app.get('/localGames', function(req, res){
-	console.log(req.body);
+	console.log(req.body.zipcode);
 
 	var json;
-	db.all("SELECT id, end, points, image FROM games, locs WHERE games.zipcode = locs.zipcode AND games.zipcode = " + req.body.zipcode, function(err, rows) {  
+	db.all("SELECT id, end, points, image FROM games NATURAL JOIN locs WHERE games.zipcode = " + req.body.zipcode, function(err, rows) {  
 		// rows.forEach(function (row) {  
 		//     i++;
 		//     //console.log("Url added to array");
