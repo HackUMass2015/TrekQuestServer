@@ -39,6 +39,7 @@ app.get('/loc', function(req, res){
 	var lat;
 	var lng;
 	var latlng;
+	var location_id;
 
 	request(googleMapsApi + req.body.zipcode, function (error, response, body) {
 		if (!error && response.statusCode == 200) {
@@ -55,37 +56,10 @@ app.get('/loc', function(req, res){
 			if (!error && response.statusCode == 200) {
 				console.log("body: " + body);
 				var json = JSON.parse(body);
-				//console.log("json: " + json);
-				console.log(Object.getOwnPropertyNames(json));
-
 				var data = json['data'][0];
-				console.log("data: " + data);
-				console.log(Object.getOwnPropertyNames(data));
-
 				var ancestors = data['ancestors'][0];
-				console.log("ancestors: " + ancestors);
-				console.log(Object.getOwnPropertyNames(ancestors));
-
-				var location_id = ancestors['location_id'];
+				location_id = ancestors['location_id'];
 				console.log("location_id: " + location_id);
-				console.log(Object.getOwnPropertyNames(location_id));
-
-				// var results = json['results'][0];
-				// console.log("results: " + results);
-				// console.log(Object.getOwnPropertyNames(results));
-
-				// var geometry = results['geometry'];
-				// console.log("geometry: " + geometry);
-				// console.log(Object.getOwnPropertyNames(geometry));
-
-				// location = geometry['location'];
-				// console.log(typeof(location));
-				// console.log(location);
-				// console.log(Object.getOwnPropertyNames(location));
-				// lat = location.lat;
-				// lng = location.lng;
-				// latlng = lat + "," + lng;
-				// console.log(latlng) // Show the HTML for the Google homepage. 
 				}
 			});
 		}
@@ -105,7 +79,7 @@ app.get('/loc', function(req, res){
 	//   console.log(row.id + ": " + row.ta_id);
 	// });
 
-	// res.send(req.body);
+	res.send(location_id);
 });
 
 //Returns json of all games in a given zip code
