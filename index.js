@@ -42,7 +42,7 @@ app.get('/loc', function(req, res){
 			var json = JSON.parse(body);
 			console.log("json: " + json);
 
-			var results = location['results'];
+			var results = json['results'];
 			console.log("results: " + results);
 
 			var geometry = results.geometry;
