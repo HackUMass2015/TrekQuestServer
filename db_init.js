@@ -8,7 +8,7 @@ db.serialize(function() {
   setupTable("users", "(id TEXT UNIQUE, username TEXT)");
   setupTable("teams", "(id TEXT, name TEXT, max INTEGER)");
   setupTable("locs", "(id TEXT UNIQUE, ta_id INTEGER UNIQUE)");
-  setupTable("games", "(id TEXT, author_id TEXT, start INTEGER, end INTEGER, points INTEGER)");
+  setupTable("games", "(id TEXT, zipcode INTEGER, start INTEGER, end INTEGER, points INTEGER)");
 
   //Setting up mapping tables
   setupTable("users_teams_map", "(user_id TEXT, team_id TEXT)");
@@ -18,13 +18,14 @@ db.serialize(function() {
   testUsers();
   testTeams();
   testLocations();
+  testGames();
 
   console.log("Tables initialized!");
 });
 
 function testUsers() {
 	var stmt = db.prepare("INSERT INTO users VALUES (?, ?)");
-	for (var i = 0; i < 10; i++) {
+	for (var i = 0; i < 2; i++) {
 	  stmt.run("device-" + i, "username " + i);
 	}
 	stmt.finalize();
@@ -36,7 +37,7 @@ function testUsers() {
 
 function testTeams() {
 	var stmt = db.prepare("INSERT INTO teams VALUES (?, ?, ?)");
-	for (var i = 0; i < 10; i++) {
+	for (var i = 0; i < 2; i++) {
 	  stmt.run("team-" + i, "team-name " + i, i);
 	}
 	stmt.finalize();
@@ -48,13 +49,26 @@ function testTeams() {
 
 function testLocations() {
 	var stmt = db.prepare("INSERT INTO locs VALUES (?, ?)");
-	for (var i = 0; i < 10; i++) {
+	for (var i = 0; i < 2; i++) {
 	  stmt.run("location-" + i, i);
 	}
 	stmt.finalize();
 
-	db.each("SELECT rowid AS num, ta_id FROM locs", function(err, row) {
-	  console.log(row.num + ": " + row.ta_id);
+	db.each("SELECT id, ta_id FROM locs", function(err, row) {
+	  console.log(row.id + ": " + row.ta_id);
+	});
+}
+
+function testGames() {
+	var d = new Date();
+	var stmt = db.prepare("INSERT INTO games VALUES (?, ?)");
+	for (var i = 0; i < 2; i++) {
+	  stmt.run("game-" + i, i, d.getTime(), d.getTime(), i*100);
+	}
+	stmt.finalize();
+
+	db.each("SELECT id, zipcode, start, end, points FROM games", function(err, row) {
+	  console.log(row.id + ": " + row.zipcode + ", " + row.start + ", " + row.end + ", " + row.points);
 	});
 }
 
