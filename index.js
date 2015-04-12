@@ -137,7 +137,9 @@ function getAttractions (){
 					var stmt = db.prepare("INSERT OR IGNORE INTO attractions (location_id, zipcode) VALUES (?, ?)");
 					stmt.run(location_id, zipcode);
 					stmt.finalize();
+					console.log("Location Inserted");
 				});
+				console.log("Inserted locations");
 				//console.log("image: " + image);
 				//locResponse();
 				//attractionResponse();
