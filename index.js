@@ -43,53 +43,43 @@ app.get('/loc', function(req, res){
 	request(googleMapsApi + req.body.zipcode, function (error, response, body) {
 		if (!error && response.statusCode == 200) {
 			var json = JSON.parse(body);
-			console.log("json: " + json);
-			console.log(Object.getOwnPropertyNames(json));
-
 			var results = json['results'][0];
-			console.log("results: " + results);
-			console.log(Object.getOwnPropertyNames(results));
-
 			var geometry = results['geometry'];
-			console.log("geometry: " + geometry);
-			console.log(Object.getOwnPropertyNames(geometry));
-
 			location = geometry['location'];
-			console.log(typeof(location));
-			console.log(location);
-			console.log(Object.getOwnPropertyNames(location));
 			lat = location.lat;
 			lng = location.lng;
 			latlng = lat + "," + lng;
-			console.log(latlng) // Show the HTML for the Google homepage. 
+			console.log("Latitude and Longitude for " + req.body.zipcode + ": " + latlng); // Show the HTML for the Google homepage. 
+
+			request(tripAdvisorApi + latlng + tripAdvisorKey, function (error, response, body) {
+			if (!error && response.statusCode == 200) {
+				console.log("body: " + body);
+				var json = JSON.parse(body);
+				console.log("json: " + json);
+				console.log(Object.getOwnPropertyNames(json));
+
+				// var results = json['results'][0];
+				// console.log("results: " + results);
+				// console.log(Object.getOwnPropertyNames(results));
+
+				// var geometry = results['geometry'];
+				// console.log("geometry: " + geometry);
+				// console.log(Object.getOwnPropertyNames(geometry));
+
+				// location = geometry['location'];
+				// console.log(typeof(location));
+				// console.log(location);
+				// console.log(Object.getOwnPropertyNames(location));
+				// lat = location.lat;
+				// lng = location.lng;
+				// latlng = lat + "," + lng;
+				// console.log(latlng) // Show the HTML for the Google homepage. 
+				}
+			});
 		}
 	});
 
-	request(tripAdvisorApi + latlng + tripAdvisorKey, function (error, response, body) {
-		if (!error && response.statusCode == 200) {
-			console.log("body: " + body);
-			var json = JSON.parse(body);
-			console.log("json: " + json);
-			console.log(Object.getOwnPropertyNames(json));
 
-			// var results = json['results'][0];
-			// console.log("results: " + results);
-			// console.log(Object.getOwnPropertyNames(results));
-
-			// var geometry = results['geometry'];
-			// console.log("geometry: " + geometry);
-			// console.log(Object.getOwnPropertyNames(geometry));
-
-			// location = geometry['location'];
-			// console.log(typeof(location));
-			// console.log(location);
-			// console.log(Object.getOwnPropertyNames(location));
-			// lat = location.lat;
-			// lng = location.lng;
-			// latlng = lat + "," + lng;
-			// console.log(latlng) // Show the HTML for the Google homepage. 
-		}
-	});
 
 
 
