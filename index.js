@@ -17,10 +17,7 @@ app.put('/user', function(req, res){
 
 	
 
-	var stmt = db.prepare(
-		"insert or replace into users (id,username) values
-		(?, ?)
-		");
+	var stmt = db.prepare("INSERT OR REPLACE INTO users (id,username) VALUES (?, ?)");
 	stmt.run(req.body.id, req.body.name);
 	stmt.finalize();
 
