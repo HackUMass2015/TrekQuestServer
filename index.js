@@ -112,7 +112,7 @@ function locResponse(){
 }
 
 //Get attractions for a given zip code.
-app.get('/attractions', function(req, res){
+app.get('/attractions', function (req, res){
 	console.log(req.body);
 
 	zipcode = "\"" + req.body.zipcode + "\"";
@@ -121,21 +121,35 @@ app.get('/attractions', function(req, res){
 	getAttractions();
 });
 
-function getAttractions(){
-	db.get("SELECT location_id FROM locs WHERE zipcode = " + zipcode,function (error, row) {
+function getAttractions (){
+	db.get("SELECT location_id FROM locs WHERE zipcode = " + zipcode, function (error, row) {
 		request(tripAdvisorLocationPrefix + row.location_id + tripAdvisorAttractionsSuffix, function (error, response, body) {
 			if (!error && response.statusCode == 200) {
 				var json = JSON.parse(body);
 				var data = json['data'][0];
-				var location_id = data['location_id'];
-				console.log(location_id);
+				json['data'].forEach(function (attraction){
+					location_id = attraction['location_id'];
+					console.log(location_id);
+					var stmt = db.prepare("INSERT OR IGNORE INTO attractions (location_id, zipcode) VALUES (?, ?)");
+					stmt.run(location_id, zipcode);
+					stmt.finalize();
+				});
 				//console.log("image: " + image);
 				//locResponse();
-				response.send(location_id);
+				attractionResponse();
+				
 			}
 		});
 	});
-	
+}
+
+function attractionResponse (){
+	db.all("SELECT location_id FROM attractions WHERE zipcode = " + zipcode, function (error, rows) {
+		var json = JSON.stringify(rows);
+
+		response.type('text/plain');
+		response.send(location_id);
+	});
 }
 
 //Returns json of all games in a given zip code
@@ -143,16 +157,8 @@ app.get('/localGames', function(req, res){
 	console.log(req.body['zipcode']);
 	var zipcode = "\"" + req.body.zipcode +  "\"";
 
-	var json;
-	db.all("SELECT id, end, points, image FROM (games INNER JOIN locs ON games.zipcode = locs.zipcode) WHERE games.zipcode = " + zipcode, function(err, rows) {  
-		// rows.forEach(function (row) {  
-		//     i++;
-		//     //console.log("Url added to array");
-		// });
-		//console.log(rows);
-		json = JSON.stringify(rows);
-		// console.log(games.toString());
-		//console.log(json);
+	db.all("SELECT id, end, points, image FROM (games INNER JOIN locs ON games.zipcode = locs.zipcode) WHERE games.zipcode = " + zipcode, function (err, rows) {
+		var json = JSON.stringify(rows);
 
 		res.type('text/plain');
   		res.send(json);
