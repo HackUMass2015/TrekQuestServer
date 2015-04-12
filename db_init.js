@@ -7,7 +7,7 @@ db.serialize(function() {
   //Setting up info tables
   setupTable("users", "(id TEXT UNIQUE, username TEXT)");
   setupTable("teams", "(id TEXT, name TEXT, max INTEGER)");
-  setupTable("locs", "(id TEXT UNIQUE, zipcode INTEGER UNIQUE, image TEXT)");
+  setupTable("locs", "(id TEXT UNIQUE, zipcode INTEGER, image TEXT)");
   setupTable("games", "(id TEXT, zipcode INTEGER, start INTEGER, end INTEGER, points INTEGER, winnerID TEXT)");
 
   //Setting up mapping tables
@@ -64,7 +64,7 @@ function testGames() {
 	var stmt = db.prepare("INSERT INTO games VALUES (?, ?, ?, ?, ?, ?)");
 	for (var i = 0; i < 12; i++) {
 		var d = new Date();
-		stmt.run("game-" + i, i%4+1, d.getTime(), d.getTime(), i*100, "1");
+		stmt.run("game-" + i, 01002, d.getTime(), d.getTime(), i*100, "1");
 	}
 	stmt.finalize();
 

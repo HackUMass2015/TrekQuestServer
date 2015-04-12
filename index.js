@@ -115,7 +115,7 @@ app.get('/localGames', function(req, res){
 	var json;
 	var games = [];
 	var i = 0;
-	db.all("SELECT id, end, points FROM games WHERE zipcode = " + req.body.zipcode, function(err, rows) {  
+	db.all("SELECT id, end, points, images FROM games NATURAL JOIN locs WHERE zipcode = " + req.body.zipcode, function(err, rows) {  
 		// rows.forEach(function (row) {  
 		//     i++;
 		//     //console.log("Url added to array");
