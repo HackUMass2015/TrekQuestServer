@@ -5,9 +5,14 @@ var sqlite3	= require('sqlite3').verbose();
 var dbName = './trek.db';
 var db = new sqlite3.Database(dbName);
 var request = require('request');
+
 var googleMapsApi = 'http://maps.googleapis.com/maps/api/geocode/json?address=';
-var tripAdvisorApi = 'http://api.tripadvisor.com/api/partner/2.0/map/';
+
 var tripAdvisorKey = '?key=HackUMass-93b8e93cda61';
+var tripAdvisorApi = 'http://api.tripadvisor.com/api/partner/2.0/map/';
+var tripAdvisorPhotoPrefix = 'http://api.tripadvisor.com/api/partner/2.0/location/';
+var tripAdvisorPhotoSuffix = '/photos' + tripAdvisorKey;
+
 
 app.use(bodyParser.json());
 
@@ -32,47 +37,67 @@ app.put('/user', function(req, res){
 	res.send(req.body);
 });
 
+var zipcode;
+var location_id;
+var image;
 //Get a location if it exists. Creates a new one if not
 app.get('/loc', function(req, res){
 	console.log(req.body);
-	var location;
-	var lat;
-	var lng;
-	var latlng;
-	var location_id;
 
-	request(googleMapsApi + req.body.zipcode, function (error, response, body) {
+	zipcode = req.body.zipcode;
+	getLangLong();
+});
+
+function getLangLong(){
+	//Gets Lat-Long from zipcode
+	request(googleMapsApi + zipcode, function (error, response, body) {
 		if (!error && response.statusCode == 200) {
 			var json = JSON.parse(body);
 			var results = json['results'][0];
 			var geometry = results['geometry'];
-			location = geometry['location'];
-			lat = location.lat;
-			lng = location.lng;
-			latlng = lat + "," + lng;
-			console.log("Latitude and Longitude for " + req.body.zipcode + ": " + latlng); // Show the HTML for the Google homepage. 
+			var location = geometry['location'];
+			var lat = location.lat;
+			var lng = location.lng;
+			var latlng = lat + "," + lng;
+			console.log("Latitude and Longitude for " + zipcode + ": " + latlng); // Show the HTML for the Google homepage.
 
-			request(tripAdvisorApi + latlng + tripAdvisorKey, function (error, response, body) {
-			if (!error && response.statusCode == 200) {
-				var json = JSON.parse(body);
-				var data = json['data'][0];
-				var ancestors = data['ancestors'][0];
-				location_id = ancestors['location_id'];
-				console.log("location_id: " + location_id);
-
-				res.send(location_id);
-				}
-			});
+			getTALocID(latlng);
 		}
 	});
+}
 
+//Gets tripadvisor locations from lat-long
+function getTALocID(latlng){
+	request(tripAdvisorApi + latlng + tripAdvisorKey, function (error, response, body) {
+		if (!error && response.statusCode == 200) {
+			var json = JSON.parse(body);
+			var data = json['data'][0];
+			var ancestors = data['ancestors'][0];
+			location_id = ancestors['location_id'];
+			console.log("location_id: " + location_id);
 
+			getPhotoUrl(location_id);
+		}
+	});
+}
 
+function getImage(){
+	request(tripAdvisorPhotoPrefix + location_id + tripAdvisorPhotoSuffix, function (error, response, body) {
+		if (!error && response.statusCode == 200) {
+			var json = JSON.parse(body);
+			var data = json['data'][0];
+			var thumbnail = data['images']['thumbnail'];
+			image = thumbnail['url'];
+			console.log("image: " + image);
 
+			var stmt = db.prepare("INSERT OR IGNORE INTO locs (id,zipcode,image) VALUES (?, ?, ?)");
+			stmt.run(location_id, zipcode, image);
+			stmt.finalize();
 
-	// var stmt = db.prepare("INSERT OR REPLACE INTO locs (id,ta_id) VALUES (?, ?)");
-	// stmt.run(req.body.id, req.body.name);
-	// stmt.finalize();
+			res.send(location_id);
+		}
+	});
+}
 
 	// console.log("Added Location");
 	
@@ -92,8 +117,6 @@ app.get('/localGames', function(req, res){
 	var i = 0;
 	db.all("SELECT id, end, points FROM games WHERE zipcode = " + req.body.zipcode, function(err, rows) {  
 		// rows.forEach(function (row) {  
-		//     //console.log(row.imageUrl);
-		//     games[i] = row.imageUrl;
 		//     i++;
 		//     //console.log("Url added to array");
 		// });
