@@ -97,7 +97,7 @@ function getImage(){
 }
 
 function locResponse(){
-	var stmt = db.prepare("INSERT OR IGNORE INTO locs (id,zipcode,image) VALUES (?, ?, ?)");
+	var stmt = db.prepare("INSERT OR IGNORE INTO locs (location_id,zipcode,image) VALUES (?, ?, ?)");
 	stmt.run(location_id, zipcode, image);
 	stmt.finalize();
 
@@ -114,15 +114,15 @@ app.get('/localGames', function(req, res){
 	var zipcode = "\"" + req.body.zipcode +  "\"";
 
 	var json;
-	db.all("SELECT end, points, image FROM (games INNER JOIN locs ON games.zipcode = locs.zipcode) WHERE games.zipcode = 	" + zipcode, function(err, rows) {  
+	db.all("SELECT id, end, points, image FROM (games INNER JOIN locs ON games.zipcode = locs.zipcode) WHERE games.zipcode = " + zipcode, function(err, rows) {  
 		// rows.forEach(function (row) {  
 		//     i++;
 		//     //console.log("Url added to array");
 		// });
-		console.log(rows);
+		//console.log(rows);
 		json = JSON.stringify(rows);
 		// console.log(games.toString());
-		console.log(json);
+		//console.log(json);
 
 		res.type('text/plain');
   		res.send(json);

@@ -7,8 +7,9 @@ db.serialize(function() {
   //Setting up info tables
   setupTable("users", "(id TEXT UNIQUE, username TEXT)");
   setupTable("teams", "(id TEXT, name TEXT, max INTEGER)");
-  setupTable("locs", "(id TEXT UNIQUE, zipcode TEXT, image TEXT)");
+  setupTable("locs", "(location_id TEXT UNIQUE, zipcode TEXT, image TEXT)");
   setupTable("games", "(id TEXT, zipcode TEXT, start INTEGER, end INTEGER, points INTEGER, winnerID TEXT)");
+  setupTable("attractions", "(id TEXT, location_id TEXT)");
 
   //Setting up mapping tables
   setupTable("users_teams_map", "(user_id TEXT, team_id TEXT)");
