@@ -39,10 +39,11 @@ app.get('/loc', function(req, res){
 
 	request(googleMapsApi + req.body.zipcode, function (error, response, body) {
 		if (!error && response.statusCode == 200) {
-			location = body.results.geometry.location;
-			lat = location.lat;
-			lng = location.lng;
-			console.log(lat + ", " + lng) // Show the HTML for the Google homepage. 
+			location = body.results;
+			console.log(location);
+			// lat = location.lat;
+			// lng = location.lng;
+			// console.log(lat + ", " + lng) // Show the HTML for the Google homepage. 
 		}
 	})
 
