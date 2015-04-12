@@ -5,7 +5,7 @@ db.serialize(function() {
   console.log("Database Serialization Initializing...");
 
   //Setting up info tables
-  setupTable("users", "(id TEXT PRIMARY KEY, username TEXT");
+  setupTable("users", "(id INTEGER PRIMARY KEY, username TEXT");
   setupTable("teams", "(id TEXT, name TEXT, max INTEGER)");
   setupTable("locs", "(id TEXT, ta_id INTEGER)");
   setupTable("games", "(id TEXT, author_id TEXT, start INTEGER, end INTEGER, points INTEGER)");
@@ -25,7 +25,7 @@ db.serialize(function() {
 function testUsers() {
 	var stmt = db.prepare("INSERT INTO users VALUES (?, ?)");
 	for (var i = 0; i < 10; i++) {
-	  stmt.run("device-" + i, "username " + i);
+	  stmt.run(i, "username " + i);
 	}
 	stmt.finalize();
 
