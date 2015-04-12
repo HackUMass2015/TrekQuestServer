@@ -41,6 +41,7 @@ app.get('/loc', function(req, res){
 		if (!error && response.statusCode == 200) {
 			location = body;
 			console.log(location);
+			console.log(Object.getOwnPropertyNames(location));
 			// lat = location.lat;
 			// lng = location.lng;
 			// console.log(lat + ", " + lng) // Show the HTML for the Google homepage. 
