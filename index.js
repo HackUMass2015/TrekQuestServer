@@ -102,9 +102,7 @@ function getImage(){
 function locResponse(){
 	var stmt = db.prepare("INSERT OR IGNORE INTO locs (location_id,zipcode,image) VALUES (?, ?, ?)");
 	stmt.run(location_id, zipcode, image);
-	stmt.finalize();
-
-	getAttractions();
+	stmt.finalize(getAttractions());
 
 	var json = JSON.stringify({ value: location_id});
 	//console.log(json);
