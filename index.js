@@ -45,10 +45,10 @@ app.get('/loc', function(req, res){
 			var results = json['results'];
 			console.log("results: " + results);
 
-			var geometry = results.geometry;
+			var geometry = results['geometry'];
 			console.log("geometry: " + geometry);
 
-			location = geometry.location;
+			location = geometry['location'];
 			console.log(typeof(location));
 			console.log(location);
 			console.log(Object.getOwnPropertyNames(location));
