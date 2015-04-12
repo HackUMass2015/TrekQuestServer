@@ -41,12 +41,15 @@ app.get('/loc', function(req, res){
 		if (!error && response.statusCode == 200) {
 			var json = JSON.parse(body);
 			console.log("json: " + json);
+			console.log(Object.getOwnPropertyNames(json));
 
 			var results = json['results'];
 			console.log("results: " + results);
+			console.log(Object.getOwnPropertyNames(results));
 
 			var geometry = results[2];
 			console.log("geometry: " + geometry);
+			console.log(Object.getOwnPropertyNames(geometry));
 
 			location = geometry['location'];
 			console.log(typeof(location));
