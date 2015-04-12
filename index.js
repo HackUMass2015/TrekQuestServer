@@ -111,9 +111,9 @@ function locResponse(){
 //Returns json of all games in a given zip code
 app.get('/localGames', function(req, res){
 	console.log(req.body['zipcode']);
-//WHERE games.zipcode = 	" + req.body['zipcode']
+
 	var json;
-	db.all("SELECT end, points, image FROM games INNER JOIN locs ON games.zipcode = locs.zipcode", function(err, rows) {  
+	db.all("SELECT end, points, image FROM games INNER JOIN locs ON games.zipcode = locs.zipcode WHERE games.zipcode = 	" + req.body['zipcode'], function(err, rows) {  
 		// rows.forEach(function (row) {  
 		//     i++;
 		//     //console.log("Url added to array");
