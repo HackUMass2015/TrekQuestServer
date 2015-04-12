@@ -46,6 +46,16 @@ app.get('/loc', function(req, res){
 
 	zipcode = req.body.zipcode;
 	getLangLong();
+
+	var stmt = db.prepare("INSERT OR IGNORE INTO locs (id,zipcode,image) VALUES (?, ?, ?)");
+	stmt.run(location_id, zipcode, image);
+	stmt.finalize();
+
+	var json = JSON.stringify({ value: location_id});
+	console.log(json);
+
+	res.type('text/plain');
+	res.send(json);
 });
 
 function getLangLong(){
@@ -89,12 +99,6 @@ function getImage(){
 			var thumbnail = data['images']['thumbnail'];
 			image = thumbnail['url'];
 			console.log("image: " + image);
-
-			var stmt = db.prepare("INSERT OR IGNORE INTO locs (id,zipcode,image) VALUES (?, ?, ?)");
-			stmt.run(location_id, zipcode, image);
-			stmt.finalize();
-
-			res.send(location_id);
 		}
 	});
 }
