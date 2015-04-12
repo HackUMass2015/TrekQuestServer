@@ -120,6 +120,7 @@ app.get('/localGames', function(req, res){
 		//     i++;
 		//     //console.log("Url added to array");
 		// });
+		console.log(rows);
 		json = JSON.stringify(rows);
 		// console.log(games.toString());
 		console.log(json);
