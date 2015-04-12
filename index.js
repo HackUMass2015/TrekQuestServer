@@ -47,7 +47,7 @@ app.get('/loc', function(req, res){
 			console.log("results: " + results);
 			console.log(Object.getOwnPropertyNames(results));
 
-			var geometry = results[2];
+			var geometry = results['geometry'];
 			console.log("geometry: " + geometry);
 			console.log(Object.getOwnPropertyNames(geometry));
 
