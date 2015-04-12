@@ -40,22 +40,14 @@ app.put('/user', function(req, res){
 var zipcode;
 var location_id;
 var image;
+var response;
 //Get a location if it exists. Creates a new one if not
 app.get('/loc', function(req, res){
 	console.log(req.body);
 
 	zipcode = req.body.zipcode;
+	response = res;
 	getLangLong();
-
-	var stmt = db.prepare("INSERT OR IGNORE INTO locs (id,zipcode,image) VALUES (?, ?, ?)");
-	stmt.run(location_id, zipcode, image);
-	stmt.finalize();
-
-	var json = JSON.stringify({ value: location_id});
-	console.log(json);
-
-	res.type('text/plain');
-	res.send(json);
 });
 
 function getLangLong(){
@@ -99,8 +91,21 @@ function getImage(){
 			var thumbnail = data['images']['thumbnail'];
 			image = thumbnail['url'];
 			console.log("image: " + image);
+			locResponse();
 		}
 	});
+}
+
+function locResponse(){
+	var stmt = db.prepare("INSERT OR IGNORE INTO locs (id,zipcode,image) VALUES (?, ?, ?)");
+	stmt.run(location_id, zipcode, image);
+	stmt.finalize();
+
+	var json = JSON.stringify({ value: location_id});
+	console.log(json);
+
+	response.type('text/plain');
+	response.send(json);
 }
 
 //Returns json of all games in a given zip code
