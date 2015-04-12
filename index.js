@@ -11,7 +11,7 @@ app.get('/', function (req, res) {
   res.send('Hello World!');
 });
 
-//Addes user if user doesn't exist. Updates username if user exists
+//Adds user if user doesn't exist. Updates username if user exists
 app.put('/user', function(req, res){
 	console.log(req.body);
 
@@ -25,15 +25,14 @@ app.put('/user', function(req, res){
 	  console.log(row.id + ": " + row.username);
 	});
 
-	//db.close();
-
 	res.send(req.body);
 });
 
+//Adds location if location doesn't exist. Replaces location if exists
 app.put('/loc', function(req, res){
 	console.log(req.body);
 
-	var stmt = db.prepare("INSERT OR IGNORE INTO locs (id,ta_id) VALUES (?, ?)");
+	var stmt = db.prepare("INSERT OR REPLACE INTO locs (id,ta_id) VALUES (?, ?)");
 	stmt.run(req.body.id, req.body.name);
 	stmt.finalize();
 
@@ -43,9 +42,29 @@ app.put('/loc', function(req, res){
 	  console.log(row.id + ": " + row.ta_id);
 	});
 
-	//db.close();
-
 	res.send(req.body);
+});
+
+app.get('/localGames', function(req, res){
+	console.log(req.body);
+
+	var json;
+	var games = [];
+	var i = 0;
+	db.all("SELECT id, end, points FROM games WHERE zipcode = " + req.body.zipcode, function(err, rows) {  
+		// rows.forEach(function (row) {  
+		//     //console.log(row.imageUrl);
+		//     games[i] = row.imageUrl;
+		//     i++;
+		//     //console.log("Url added to array");
+		// });
+		json = JSON.stringify(rows);
+		// console.log(games.toString());
+		console.log(json);
+
+		res.type('text/plain');
+  		res.send(json);
+	});
 });
 
 var server = app.listen(80, function () {

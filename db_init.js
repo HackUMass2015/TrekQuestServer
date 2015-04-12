@@ -62,8 +62,8 @@ function testLocations() {
 function testGames() {
 	var d = new Date();
 	var stmt = db.prepare("INSERT INTO games VALUES (?, ?, ?, ?, ?)");
-	for (var i = 0; i < 2; i++) {
-	  stmt.run("game-" + i, i, d.getTime(), d.getTime(), i*100);
+	for (var i = 0; i < 12; i++) {
+	  stmt.run("game-" + i, i%4+1, d.getTime(), d.getTime(), i*100);
 	}
 	stmt.finalize();
 
