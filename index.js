@@ -33,14 +33,14 @@ app.put('/user', function(req, res){
 app.put('/loc', function(req, res){
 	console.log(req.body);
 
-	var stmt = db.prepare("INSERT OR REPLACE INTO locs (id,username) VALUES (?, ?)");
+	var stmt = db.prepare("INSERT OR IGNORE INTO locs (id,username) VALUES (?, ?)");
 	stmt.run(req.body.id, req.body.name);
 	stmt.finalize();
 
 	console.log("Added Location");
 	
-	db.each("SELECT id, username FROM locs", function(err, row) {
-	  console.log(row.id + ": " + row.username);
+	db.each("SELECT id, ta_id FROM locs", function(err, row) {
+	  console.log(row.id + ": " + row.ta_id);
 	});
 
 	//db.close();

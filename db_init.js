@@ -7,7 +7,7 @@ db.serialize(function() {
   //Setting up info tables
   setupTable("users", "(id TEXT UNIQUE, username TEXT)");
   setupTable("teams", "(id TEXT, name TEXT, max INTEGER)");
-  setupTable("locs", "(id TEXT, ta_id INTEGER UNIQUE)");
+  setupTable("locs", "(id TEXT UNIQUE, ta_id INTEGER UNIQUE)");
   setupTable("games", "(id TEXT, author_id TEXT, start INTEGER, end INTEGER, points INTEGER)");
 
   //Setting up mapping tables
